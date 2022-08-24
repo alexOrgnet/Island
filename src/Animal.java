@@ -20,17 +20,19 @@ public class Animal {
 
     boolean hadlunch = false;
 
-    public Animal(String name, boolean alive, int x, int y, int age, int satiety, boolean carnivore, boolean male, boolean readytosex) {
+    boolean child = true;
+
+    public Animal(String name, int x, int y) {
         this.name = name;
-        this.alive = alive;
+        this.alive = true;
         this.x = x;
         this.y = y;
-        this.age = age;
-        this.satiety = satiety;
+        this.age = 0;
+        this.satiety = 3;
         this.hadlunch = false; //already ate food
-        this.carnivore = carnivore;
-        this.male = male;
-        this.readytosex = readytosex;
+        this.male = Event.probability(50);
+        this.readytosex = false;
+        this.child = true;
     }
 
     public Animal() {
@@ -40,14 +42,15 @@ public class Animal {
     @Override
     public String toString() {
         return "Animal{" +
-                "name='" + name + '\'' +
-                ", carnivore='" + carnivore + '\'' +
-                ", satiety='" + satiety + '\'' +
-                ", male='" + male + '\'' +
-                ", alive='" + alive + '\'' +
-                ", age='" + age + '\'' +
-                ", type='" + getClass() + '\'' +
-                ", location= x=" + x + " у ="+y+'\'' +
+                "name='" + this.name + '\'' +
+                ", carnivore='" + this.carnivore + '\'' +
+                ", satiety='" + this.satiety + '\'' +
+                ", male='" + this.male + '\'' +
+                ", alive='" + this.alive + '\'' +
+                ", ready to sex='" + this.readytosex + '\'' +
+                ", age='" + this.age + '\'' +
+                //", type='" + getClass() + '\'' +
+                ", location= x=" + this.x + " у ="+this.y+'\'' +
                 '}';
     }
 
@@ -88,12 +91,13 @@ public class Animal {
         another_animal.satiety = 0;
         another_animal.alive = false;
 
+        System.out.println("Animal съел "+another_animal);
 
     }
 
     public Animal reproduce() {
 
-        Animal animal  = Farm.Create("Animal", this.x, this.y, this.carnivore);
+        Animal animal  = Farm.Create("Animal", this.x, this.y);
         this.readytosex = false;
 
         return animal;

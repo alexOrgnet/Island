@@ -7,15 +7,18 @@ public class Main {
 
     public static void main(String[] args) {
 
+
+        int cycles = 10;
+
         List<Animal> list_animals = new ArrayList<>();
 
-        Animal animal  = Farm.Create("Animal", 10, 10, true);
+        Animal animal  = Farm.Create("Animal", 10, 10);
 
         animal.move(100,10,2);
 
         list_animals.add( animal);
 
-        Animal animal2  = Farm.Create("Wolf", 10, 10, true);
+        Animal animal2  = Farm.Create("Wolf", 10, 10);
 
         animal2.move(100,10,1);
 
