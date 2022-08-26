@@ -1,3 +1,5 @@
+package Techno;
+
 public final class Event {
 
     public static boolean probability (int probability){

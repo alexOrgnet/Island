@@ -1,26 +1,35 @@
+package Animal;
+import Animal.Carnivores.Carnivores;
+import FarmBuilder.Farm;
+import Techno.Event;
+
 public class Animal {
 
-    String name = "animal";
+    public String name = "animal";
 
-    boolean alive = true;
+    public boolean alive = true;
 
-    int x = 0; //coordinates x
-    int y = 0; //coordinates y
+    protected int x = 0; //coordinates x
+    protected int y = 0; //coordinates y
 
-    int age = 0; //number of cycles alive
+    protected int age = 0; //number of cycles alive
 
     int weight = 0; //вес животного
-    int satiety = 0; //if 0 the animal is dead
+    public int satiety = 0; //if 0 the animal is dead
 
-    boolean carnivore = false;
+    public boolean carnivore = false;
 
-    boolean male = true;
+    protected boolean male = true;
 
-    boolean readytosex = true;
+    protected boolean readytosex = true;
 
     boolean hadlunch = false;
 
     boolean child = true;
+
+    public String getName() {
+        return name;
+    }
 
     public Animal(String name, int x, int y) {
         this.name = name;
@@ -39,9 +48,13 @@ public class Animal {
 
     }
 
+    public boolean getAlive() {
+        return this.alive;
+    }
+
     @Override
     public String toString() {
-        return "Animal{" +
+        return "Animals{" +
                 "name='" + this.name + '\'' +
                 ", carnivore='" + this.carnivore + '\'' +
                 ", satiety='" + this.satiety + '\'' +
@@ -54,10 +67,10 @@ public class Animal {
                 '}';
     }
 
-    public void move(int x, int y, int steps) {
+    public void move(int x, int y) {
 
-        int step_for_x = steps;
-        int step_for_y = steps;
+        int step_for_x = 1;
+        int step_for_y = 1;
 
         boolean probability_of_direction_x = Event.probability(50);
         boolean probability_of_direction_y = Event.probability(50);
@@ -83,25 +96,31 @@ public class Animal {
             this.y = y - step_for_y;
         } else this.y = y + step_for_y;
 
-    }
-
-    public void eat(Animal another_animal) {
-
-        this.satiety = this.satiety+1;
-        another_animal.satiety = 0;
-        another_animal.alive = false;
-
-        System.out.println("Animal съел "+another_animal);
+        x = this.x;
+        y = this.y;
 
     }
 
-    public Animal reproduce() {
+    public void eat(Animal b, int x, int y) {
 
-        Animal animal  = Farm.Create("Animal", this.x, this.y);
+        System.out.println("Хищник съел травоядного " + b.name);
+
+    }
+
+    public Animal reproduce(int x, int y) {
+
+        Animal animal  = Farm.Create("Animals", this.x, this.y);
         this.readytosex = false;
+
+        System.out.println("Родился энимал в локации "+x+" "+y);
 
         return animal;
 
+    }
+
+    public boolean getCarnivore() {
+
+        return this.carnivore;
     }
 
 }
