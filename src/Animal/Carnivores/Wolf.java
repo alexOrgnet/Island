@@ -6,27 +6,26 @@ import Techno.Event;
 
 public class Wolf extends Carnivores {
 
-        Boolean carnivore = true;
-
-        public Wolf(String name, int x, int y) {
-            super();
+        public Wolf(String name, int x, int y, boolean atbirth) {
+            super(name, x, y, atbirth);
             this.name = name;
+            this.x = x;
+            this.y = y;
             this.carnivore = true;
             this.satiety = satiety*3;
+            this.baby = atbirth;
+            this.max_count = 10;
+
         }
 
     public boolean getCarnivore() {
         return this.carnivore;
     }
 
-    public void setCarnivore(Boolean carnivore) {
-        this.carnivore = carnivore;
-    }
-
     @Override
-        public Wolf reproduce(int x, int y) {
+        public Animal reproduce(Animal mom, Animal dad) {
 
-            Wolf animal  = (Wolf) Farm.Create("Wolf", this.x, this.y);
+            Wolf animal  = (Wolf) Farm.Birth("Wolf", mom, dad);
 
             System.out.println("Родился новый волчонок в локации "+x+" "+y);
 
@@ -51,42 +50,21 @@ public class Wolf extends Carnivores {
 
 
     @Override
-        public void eat(Animal another_animal,int x,int y) {
-            super.eat(another_animal,x,y);
+        public void devour(Animal another_animal) {
+            super.devour(another_animal);
 
             this.satiety = this.satiety+1;
 
-            System.out.println("Wolf съел "+another_animal.getName()+" в локации "+x+""+y);
+            System.out.println("Wolf съел "+another_animal.getName()+" в локации "+this.x+""+this.y);
         }
 
     @Override
-    public void move(int x, int y) {
+    public void move() {
+
         int step_for_x = 3;
         int step_for_y = 3;
 
-        boolean probability_of_direction_x = Event.probability(50);
-        boolean probability_of_direction_y = Event.probability(50);
-
-        //вероятность пойти вправо или лево
-        if (probability_of_direction_x == true) {
-        } else step_for_x = -1*step_for_x;
-        //вероятность пойти вверх или вниз
-        if (probability_of_direction_y == true) {
-        } else step_for_y = -1*step_for_y;
-
-        //ограничение по оси х в 160 клеток
-        if ((x + step_for_x) > 160) {
-            this.x = x - step_for_x;
-        } else if ((x + step_for_x) < 0) {
-            this.x = x - step_for_x;
-        } else this.x = x + step_for_x;
-
-        //ограничение по оси у в 20 клеток
-        if ((y + step_for_y) > 20) {
-            this.y = y - step_for_y;
-        } else if ((y + step_for_y) < 0) {
-            this.y = y - step_for_y;
-        } else this.y = y + step_for_y;
+        this.make_shift(step_for_x, step_for_y);
 
         System.out.println("Волк переместился в другую локацию " + x + ", y = " + y);
 

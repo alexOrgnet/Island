@@ -25,13 +25,15 @@ public class Animal {
 
     boolean hadlunch = false;
 
-    boolean child = true;
+    protected boolean baby = true;
+
+    public int max_count; //максимальное количество животных в ячейке
 
     public String getName() {
         return name;
     }
 
-    public Animal(String name, int x, int y) {
+    public Animal(String name, int x, int y, boolean birth) {
         this.name = name;
         this.alive = true;
         this.x = x;
@@ -40,8 +42,8 @@ public class Animal {
         this.satiety = 3;
         this.hadlunch = false; //already ate food
         this.male = Event.probability(50);
-        this.readytosex = false;
-        this.child = true;
+        this.readytosex = !birth;
+        this.baby = birth;
     }
 
     public Animal() {
@@ -52,11 +54,19 @@ public class Animal {
         return this.alive;
     }
 
+    public int getX() {
+        return x;
+    }
+
+    public int getY() {
+        return y;
+    }
+
     @Override
     public String toString() {
         return "Animals{" +
                 "name='" + this.name + '\'' +
-                ", carnivore='" + this.carnivore + '\'' +
+                //", carnivore='" + this.carnivore + '\'' +
                 ", satiety='" + this.satiety + '\'' +
                 ", male='" + this.male + '\'' +
                 ", alive='" + this.alive + '\'' +
@@ -67,7 +77,17 @@ public class Animal {
                 '}';
     }
 
-    public void move(int x, int y) {
+    public void move() {
+
+        int step_for_x = 1;
+        int step_for_y = 1;
+
+        this.make_shift(step_for_x, step_for_y);
+
+
+    }
+
+    public void make_shift(int x, int y) {
 
         int step_for_x = 1;
         int step_for_y = 1;
@@ -96,23 +116,19 @@ public class Animal {
             this.y = y - step_for_y;
         } else this.y = y + step_for_y;
 
-        x = this.x;
-        y = this.y;
+    }
+
+    public void eat() {
+
 
     }
 
-    public void eat(Animal b, int x, int y) {
+    public Animal reproduce(Animal mom, Animal dad) {
 
-        System.out.println("Хищник съел травоядного " + b.name);
-
-    }
-
-    public Animal reproduce(int x, int y) {
-
-        Animal animal  = Farm.Create("Animals", this.x, this.y);
+        Animal animal  = Farm.Birth("Animals", mom, dad);
         this.readytosex = false;
 
-        System.out.println("Родился энимал в локации "+x+" "+y);
+        System.out.println("Родился энимал в локации у родителей "+mom+" и "+dad);
 
         return animal;
 
@@ -123,4 +139,47 @@ public class Animal {
         return this.carnivore;
     }
 
+    public void devour(Animal a) {
+    }
+
+    public int getSatiety() {
+        return this.satiety;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
+    }
+
+    public boolean isAlive() {
+        return alive;
+    }
+
+
+    public int getWeight() {
+        return weight;
+    }
+
+    public void setWeight(int weight) {
+        this.weight = weight;
+    }
+
+    public boolean isMale() {
+        return male;
+    }
+
+    public boolean isReadytosex() {
+        return readytosex;
+    }
+
+    public boolean isHadlunch() {
+        return hadlunch;
+    }
+
+    public boolean isBaby() {
+        return baby;
+    }
 }

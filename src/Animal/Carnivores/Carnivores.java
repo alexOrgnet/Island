@@ -5,7 +5,20 @@ public abstract class Carnivores extends Animal {
 
     boolean carnivore=true;
 
-    public void eat(Animal another_animal, int x, int y) {
+    public boolean isCarnivore() {
+        return carnivore;
+    }
+
+    public Carnivores(String name, int x, int y, boolean birth) {
+        super(name, x, y, birth);
+        this.carnivore = true;
+    }
+
+    public Animal reproduce(Animal mom, Animal dad) {
+        return super.reproduce(mom, dad);
+    }
+
+    public void devour(Animal another_animal) {
 
         this.satiety = this.satiety+1;
         another_animal.satiety = 0;
@@ -13,14 +26,14 @@ public abstract class Carnivores extends Animal {
 
     }
 
-    @Override
-    public Carnivores reproduce(int x, int y) {
-        return (Carnivores) super.reproduce(x, y);
-    }
-
 
     @Override
-    public void move(int x, int y) {
-        super.move(x, y);
+    public void move() {
+
+        int step_for_x = 1;
+        int step_for_y = 1;
+
+        this.make_shift(step_for_x, step_for_y);
+
     }
 }

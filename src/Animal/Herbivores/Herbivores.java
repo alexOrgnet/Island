@@ -1,15 +1,17 @@
 package Animal.Herbivores;
 import Animal.Animal;
 
-public abstract class Herbivores extends Animal {
+public class Herbivores extends Animal {
 
     boolean carnivore=false;
 
 
-    public abstract void eat(Animal another_animal);
+    public void eat() {
+
+    }
 
     @Override
-    public void move(int x, int y) {
-        super.move(x, y);
+    public void move() {
+        super.move();
     }
 }
