@@ -11,7 +11,7 @@ public class Stats {
     public static Stats getInstance() {
         return SingletonHolder.HOLDER_INSTANCE;
     }
-    public static String showStatistic(List<Animal>[][] island){
+    public String showStatistic(List<Animal>[][] island){
 
 
 
@@ -23,7 +23,7 @@ public class Stats {
 
                     for (Animal a : island[x][y]) {
 
-                        System.out.println("В данной части острова "+x+":"+y+" найден " + a.getName()+" с возрастом "+ a.getAge());}
+                        System.out.println("Сообщение от модуля статистики. В данной части острова "+x+":"+y+" найден " + a.getName()+" с возрастом "+ a.getAge());}
 
                 } catch (NullPointerException e) {
                         //e.printStackTrace();

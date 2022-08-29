@@ -9,14 +9,14 @@ import java.util.List;
 
 public class IslandMap {
 
-    static List<Animal>[][] karta = new ArrayList[10][10];
+    static List<Animal>[][] karta = new ArrayList[Params.x][Params.y];
 
     public static List<Animal>[][] getKarta() {
         return (List<Animal>[][]) karta;
     }
 
 
-    public static int[][] plants = new int[10][10];
+    public static int[][] plants = new int[Params.x][Params.y];
 
 
     public IslandMap() {
@@ -33,9 +33,9 @@ public class IslandMap {
     public void island_initialization() {
 
 
-        for (int x = 0; x < 10; x++) {
+        for (int x = 0; x < Params.x; x++) {
 
-            for (int y = 0; y < 10; y++) {
+            for (int y = 0; y < Params.y; y++) {
 
                 //создаем пустые списки для каждой ячейки острова
                 List<Animal> empty_animal_List = new ArrayList<>();
@@ -47,13 +47,27 @@ public class IslandMap {
 
     public void plant_initialization() {
 
-        for (int x = 0; x < 10; x++) {
+        for (int x = 0; x < Params.x; x++) {
 
-            for (int y = 0; y < 10; y++) {
+            for (int y = 0; y < Params.y; y++) {
 
                 //заполняем растениями, 10 растений на ячейку
-                plants[x][y] = 10;
+                plants[x][y] = Params.plants;
 
+            }
+        }
+    }
+
+    public void plant_growing() {
+
+        for (int x = 0; x < Params.x; x++) {
+
+            for (int y = 0; y < Params.y; y++) {
+
+                //заполняем растениями, 10 растений на ячейку
+                if (plants[x][y] < Params.plants){
+                    plants[x][y] = Params.plants;
+                }
             }
         }
     }
@@ -227,6 +241,41 @@ public class IslandMap {
                             }
                         }
                     }
+                } catch (NullPointerException e) {
+                    //e.printStackTrace();
+                }
+            }
+        }
+    }
+
+
+    public void preparing_next_cycle() {
+        //подготавливаем животных к новому циклу
+        for (int x = 0; x < 10; x++) {
+            for (int y = 0; y < 10; y++) {
+
+                try {
+
+                    List<Animal> copy1 = new ArrayList<>();
+                    copy1.addAll(karta[x][y]);
+
+                    for (Animal a : copy1) {
+
+                        if (!a.getAlive()) {
+                            //пропускаем мертвое животное
+                            //continue;
+
+                            karta[x][y].remove(a);
+                            a = null;
+
+                        }else {
+
+                            a.setAge(1);
+                            a.setBaby(false); //уже не детеныш на следующем цикле
+                            a.setHadlunch(false); //пока не было еды на следующем цикле
+                            a.setReadytosex(true); //животное готово к спариванию на следующем цикле
+                        }
+                     }
                 } catch (NullPointerException e) {
                     //e.printStackTrace();
                 }

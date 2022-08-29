@@ -1,62 +1,67 @@
 package Animal.Carnivores;
+
 import Animal.Animal;
 import FarmBuilder.Farm;
 import Techno.Event;
+import Techno.Params;
 
 
 public class Wolf extends Carnivores {
 
-        public Wolf(String name, int x, int y, boolean atbirth) {
-            super(name, x, y, atbirth);
-            this.name = name;
-            this.x = x;
-            this.y = y;
-            this.carnivore = true;
-            this.satiety = satiety*3;
-            this.baby = atbirth;
-            this.max_count = 10;
+    public static int max_count_per_cell = 10; //максимальное количество животных в ячейке
 
-        }
+    public Wolf(String name, int x, int y, boolean atbirth) {
+        super(name, x, y, atbirth);
+        this.name = name;
+        this.x = x;
+        this.y = y;
+        this.carnivore = true;
+        this.satiety = satiety * 3;
+        this.baby = atbirth;
+
+
+    }
 
     public boolean getCarnivore() {
         return this.carnivore;
     }
 
     @Override
-        public Animal reproduce(Animal mom, Animal dad) {
+    public Animal reproduce(Animal mom, Animal dad) {
 
-            Wolf animal  = (Wolf) Farm.Birth("Wolf", mom, dad);
 
-            System.out.println("Родился новый волчонок в локации "+x+" "+y);
+        Wolf animal = (Wolf) Farm.Birth("Wolf", mom, dad);
 
-            return animal;
+        System.out.println("Родился новый волчонок в локации " + x + " " + y);
 
-        }
+        return animal;
 
-        @Override
-        public String toString() {
-            return "Wolfs{" +
-                    "name='" + this.name + '\'' +
-                    ", carnivore='" + this.carnivore + '\'' +
-                    ", satiety='" + this.satiety + '\'' +
-                    ", male='" + this.male + '\'' +
-                    ", alive='" + this.alive + '\'' +
-                    ", ready to sex='" + this.readytosex + '\'' +
-                    ", age='" + this.age + '\'' +
-                    //", type='" + getClass() + '\'' +
-                    ", location= x=" + this.x + " у ="+this.y+'\'' +
-                    '}';
-        }
+    }
+
+    @Override
+    public String toString() {
+        return "Wolfs{" +
+                "name='" + this.name + '\'' +
+                ", carnivore='" + this.carnivore + '\'' +
+                ", satiety='" + this.satiety + '\'' +
+                ", male='" + this.male + '\'' +
+                ", alive='" + this.alive + '\'' +
+                ", ready to sex='" + this.readytosex + '\'' +
+                ", age='" + this.age + '\'' +
+                //", type='" + getClass() + '\'' +
+                ", location= x=" + this.x + " у =" + this.y + '\'' +
+                '}';
+    }
 
 
     @Override
-        public void devour(Animal another_animal) {
-            super.devour(another_animal);
+    public void devour(Animal another_animal) {
+        super.devour(another_animal);
 
-            this.satiety = this.satiety+1;
+        this.satiety = this.satiety + 1;
 
-            System.out.println("Wolf съел "+another_animal.getName()+" в локации "+this.x+""+this.y);
-        }
+        System.out.println("Wolf съел " + another_animal.getName() + " в локации " + this.x + "" + this.y);
+    }
 
     @Override
     public void move() {

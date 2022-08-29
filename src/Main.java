@@ -6,15 +6,25 @@ import ThrPool.Breeding;
 import ThrPool.Hunting;
 import ThrPool.Pastures;
 
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
+
 public class Main {
 
     public static void main(String[] args) {
+
 
         //создаем объект острова
         IslandMap islandMap = IslandMap.getInstance();
 
         //инициализация острова, создание карты
         islandMap.island_initialization();
+
+        //запускаем периодический сбор статистики
+        ScheduledExecutorService executorService = Executors.newScheduledThreadPool(2);
+        executorService.scheduleAtFixedRate(new ThrPool.Tasks(), 0, 3, TimeUnit.SECONDS);
+
 
         //инициализация острова, создание растительности
         islandMap.plant_initialization();
@@ -50,7 +60,8 @@ public class Main {
             Cleansing clean = Cleansing.getInstance();
             clean.cleanStaff(IslandMap.getKarta());
 
-
+            //подготовка к следующему циклу жизни
+            islandMap.preparing_next_cycle();
 
         }
     }

@@ -2,6 +2,7 @@ package Animal;
 import Animal.Carnivores.Carnivores;
 import FarmBuilder.Farm;
 import Techno.Event;
+import Techno.Params;
 
 public class Animal {
 
@@ -27,11 +28,14 @@ public class Animal {
 
     protected boolean baby = true;
 
-    public int max_count; //максимальное количество животных в ячейке
+    public static int max_count_per_cell = 0; //максимальное количество животных в ячейке
 
     public String getName() {
         return name;
     }
+
+
+    public static int[][] count_in_cell = new int[Params.x][Params.y];
 
     public Animal(String name, int x, int y, boolean birth) {
         this.name = name;
@@ -151,7 +155,7 @@ public class Animal {
     }
 
     public void setAge(int age) {
-        this.age = age;
+        this.age = this.age+age;
     }
 
     public boolean isAlive() {
@@ -181,5 +185,17 @@ public class Animal {
 
     public boolean isBaby() {
         return baby;
+    }
+
+    public void setReadytosex(boolean readytosex) {
+        this.readytosex = readytosex;
+    }
+
+    public void setHadlunch(boolean hadlunch) {
+        this.hadlunch = hadlunch;
+    }
+
+    public void setBaby(boolean baby) {
+        this.baby = baby;
     }
 }
