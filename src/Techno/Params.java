@@ -2,9 +2,9 @@ package Techno;
 
 public class Params {
 
-    private static int cycles = 2; //number of cycles
+    private static int cycles = 10; //number of cycles
 
-    private static  int fullsatiety = 2; //full satiety
+    private static  int fullsatiety = 10; //full satiety
 
     public static int getCycles() {
         return cycles;

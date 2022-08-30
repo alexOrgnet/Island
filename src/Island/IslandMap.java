@@ -18,6 +18,9 @@ public class IslandMap {
 
     public static int[][] plants = new int[Params.x][Params.y];
 
+    public static int[][] getPlants() {
+        return plants;
+    }
 
     public IslandMap() {
     }
@@ -65,6 +68,8 @@ public class IslandMap {
             for (int y = 0; y < Params.y; y++) {
 
                 //заполняем растениями, 10 растений на ячейку
+                // добавляем траву. трава растет до масксимально допустимого количества растений в одной ячейке
+
                 if (plants[x][y] < Params.plants){
                     plants[x][y] = Params.plants;
                 }
@@ -124,10 +129,6 @@ public class IslandMap {
                     copy2.addAll(karta[x][y]);
 
 
-                    //добавляем траву. трава растет и увеличивается в два раза за один цикл
-                    plants[x][y] = plants[x][y] * 2;
-
-
                     //второй процесс внутри ячейки острова. Питание травоядных
                     for (Animal a : copy1) {
 
@@ -136,6 +137,8 @@ public class IslandMap {
                         if (a.getCarnivore()) continue;//пропускаем плотоядное животное
 
                         if (a.getSatiety() == 10) continue;//пропускаем сытое животное
+
+                        if ((a.getSatiety() > Params.getFullsatiety()) || (a.isHadlunch())) continue; //животное сытое и только что поело
 
                         a.eat();//травоядное животное пощипало травку
                         plants[x][y] = plants[x][y] + Plant.grazed(a);
@@ -178,7 +181,8 @@ public class IslandMap {
 
                                 if (a.carnivore && !b.carnivore) {
 
-                                    if (a.getSatiety() > Params.getFullsatiety())
+                                    if ((a.getSatiety() > Params.getFullsatiety()) || (a.isHadlunch()))
+                                        //животное сытое и тольк что поело
                                         continue;//пропускаем сытое животное
 
                                     a.devour(a);//хищник съел травоядное
@@ -265,15 +269,22 @@ public class IslandMap {
                             //пропускаем мертвое животное
                             //continue;
 
-                            karta[x][y].remove(a);
-                            a = null;
 
                         }else {
 
-                            a.setAge(1);
+                            if (!a.isHadlunch() && a.getSatiety()<=0) {a.setAlive(false); continue;}; //если животное голодное и не ело, то оно умирает
+                            a.setAge(1); //животное прожило еще 1 год
                             a.setBaby(false); //уже не детеныш на следующем цикле
                             a.setHadlunch(false); //пока не было еды на следующем цикле
                             a.setReadytosex(true); //животное готово к спариванию на следующем цикле
+                            a.setHadlunch(false); //животное готово к приему пищи на следующем цикле
+
+                            //теперь делаем движение для всех животных
+
+                            a.move();
+
+                            karta[a.getX()][a.getY()].add(a); //добавляем животное в новую локацию
+                            karta[x][y].remove(a);//убираем животное из старой локации
                         }
                      }
                 } catch (NullPointerException e) {

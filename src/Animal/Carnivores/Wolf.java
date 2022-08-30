@@ -10,6 +10,8 @@ public class Wolf extends Carnivores {
 
     public static int max_count_per_cell = 10; //максимальное количество животных в ячейке
 
+    public static int total_number; //общее количество животных данного вида
+
     public Wolf(String name, int x, int y, boolean atbirth) {
         super(name, x, y, atbirth);
         this.name = name;
@@ -18,6 +20,8 @@ public class Wolf extends Carnivores {
         this.carnivore = true;
         this.satiety = satiety * 3;
         this.baby = atbirth;
+
+        total_number += 1;
 
 
     }
@@ -32,7 +36,7 @@ public class Wolf extends Carnivores {
 
         Wolf animal = (Wolf) Farm.Birth("Wolf", mom, dad);
 
-        System.out.println("Родился новый волчонок в локации " + x + " " + y);
+        System.out.println("Родился новый волчонок в локации x = " + x + ", y = " + y);
 
         return animal;
 
@@ -60,7 +64,7 @@ public class Wolf extends Carnivores {
 
         this.satiety = this.satiety + 1;
 
-        System.out.println("Wolf съел " + another_animal.getName() + " в локации " + this.x + "" + this.y);
+        System.out.println("Волк съел " + another_animal.getName() + " в локации x = " + this.x + ", y = " + this.y);
     }
 
     @Override
@@ -71,7 +75,17 @@ public class Wolf extends Carnivores {
 
         this.make_shift(step_for_x, step_for_y);
 
-        System.out.println("Волк переместился в другую локацию " + x + ", y = " + y);
+        System.out.println("Волк переместился в другую ячейку x = " + x + ", y = " + y);
 
     }
+
+
+
+
+    public void remove_if_dad(){
+
+        if (!this.getAlive()) total_number = total_number - 1;
+
+    }
+
 }

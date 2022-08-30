@@ -1,5 +1,11 @@
 package Techno;
+
 import Animal.Animal;
+import Animal.Carnivores.Wolf;
+import Animal.Herbivores.Horse;
+import Island.IslandMap;
+
+import java.sql.SQLOutput;
 import java.util.List;
 
 public class Stats {
@@ -11,9 +17,10 @@ public class Stats {
     public static Stats getInstance() {
         return SingletonHolder.HOLDER_INSTANCE;
     }
-    public String showStatistic(List<Animal>[][] island){
 
-
+    public void showStatistic(IslandMap o) {
+        List<Animal>[][] island;
+        island = o.getKarta();
 
         for (int x = 0; x < 10; x++) {
             for (int y = 0; y < 10; y++) {
@@ -23,14 +30,16 @@ public class Stats {
 
                     for (Animal a : island[x][y]) {
 
-                        System.out.println("Сообщение от модуля статистики. В данной части острова "+x+":"+y+" найден " + a.getName()+" с возрастом "+ a.getAge());}
+                        //System.out.println("Статистика: В данной части острова " + x + ":" + y + " найден " + a.getName() + " с возрастом " + a.getAge());
+                    }
 
                 } catch (NullPointerException e) {
-                        //e.printStackTrace();
-                    }
+                    //e.printStackTrace();
+                }
             }
         }
-
-        return "nothing found";
+        System.out.println("Общее количество волков " + Wolf.total_number);
+        System.out.println("Общее количество лошадей " + Horse.total_number);
+        System.out.println("Общее количество animal " + Animal.total_number);
     }
 }

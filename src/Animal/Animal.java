@@ -10,6 +10,10 @@ public class Animal {
 
     public boolean alive = true;
 
+    public void setAlive(boolean alive) {
+        this.alive = alive;
+    }
+
     protected int x = 0; //coordinates x
     protected int y = 0; //coordinates y
 
@@ -29,6 +33,8 @@ public class Animal {
     protected boolean baby = true;
 
     public static int max_count_per_cell = 0; //максимальное количество животных в ячейке
+
+    public static int total_number; //общее количество животных данного вида
 
     public String getName() {
         return name;
@@ -107,14 +113,14 @@ public class Animal {
         } else step_for_y = -1*step_for_y;
 
         //ограничение по оси х в 160 клеток
-        if ((x + step_for_x) > 160) {
+        if ((x + step_for_x) > Params.x) {
             this.x = x - step_for_x;
         } else if ((x + step_for_x) < 0) {
             this.x = x - step_for_x;
         } else this.x = x + step_for_x;
 
         //ограничение по оси у в 20 клеток
-        if ((y + step_for_y) > 20) {
+        if ((y + step_for_y) > Params.y) {
             this.y = y - step_for_y;
         } else if ((y + step_for_y) < 0) {
             this.y = y - step_for_y;
@@ -198,4 +204,14 @@ public class Animal {
     public void setBaby(boolean baby) {
         this.baby = baby;
     }
+
+    public void remove_if_dead() {
+    }
+
+
+/*    public void check_if_alive(){
+
+        if (!this.getAlive()) total_number = total_number - 1;
+
+    }*/
 }

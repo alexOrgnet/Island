@@ -52,14 +52,16 @@ public class Main {
             Breeding t3 = new Breeding();
             t3.run();
 
+
             //собираем статистику
+/*
             Stats stats = Stats.getInstance();
-            stats.showStatistic(IslandMap.getKarta());
+            stats.showStatistic(island);
 
             //удаляем старые данные
             Cleansing clean = Cleansing.getInstance();
-            clean.cleanStaff(IslandMap.getKarta());
-
+            clean.cleanStaff(island);
+*/
             //подготовка к следующему циклу жизни
             islandMap.preparing_next_cycle();
 

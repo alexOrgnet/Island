@@ -7,7 +7,7 @@ public class Plant {
 
     public static int grazed(Animal a){
 
-        if (a.getName() == "Horse") {
+        if (a.getCarnivore()) { //это травоядное растение
 
             a.setWeight(Math.min((a.getWeight()+2),400));
 
