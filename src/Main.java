@@ -29,13 +29,13 @@ public class Main {
 
 
         //запускаем периодический сбор статистики
-
+/*
         ScheduledExecutorService executorService = Executors.newScheduledThreadPool(2);
         executorService.scheduleAtFixedRate(new ThrPool.Tasks(), 0, 3, TimeUnit.SECONDS);
 
         if (islandMap.number_of_life_cycles > Params.getCycles()) executorService.shutdown();
 
-
+*/
 
         //получаем параметры игры: количество циклов
 
@@ -43,6 +43,10 @@ public class Main {
         for (int i = 0; i < Params.getCycles(); i++) {
 
             System.out.println("И настал день № " + (i + 1));
+
+
+            Stats stats = Stats.getInstance();
+            stats.showStatistic(islandMap);
 
 
             //выпас травоядных животных
@@ -57,20 +61,16 @@ public class Main {
             Breeding t3 = new Breeding();
             t3.run();
 
-
-
-            //собираем статистику
-
-            Stats stats = Stats.getInstance();
-            stats.showStatistic(islandMap);
-
             //удаляем старые данные
             Cleansing clean = Cleansing.getInstance();
             clean.cleanStaff(islandMap);
 
+
             //подготовка к следующему циклу жизни
             islandMap.preparing_next_cycle();
 
+            //собираем статистику
+            stats.showStatistic(islandMap);
         }
 
 

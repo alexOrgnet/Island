@@ -1,5 +1,6 @@
 package Animal;
 import Animal.Carnivores.Carnivores;
+import Animal.Herbivores.Horse;
 import FarmBuilder.Farm;
 import Techno.Event;
 import Techno.Params;
@@ -44,7 +45,7 @@ public class Animal {
     public int max_child = 0;
 
     public static int max_satiety =0; //maximum allowed satiety
-    public static int[][] count_in_cell = new int[Params.x][Params.y];
+
 
     public Animal(String name, int x, int y, boolean birth) {
         this.name = name;
@@ -81,10 +82,18 @@ public class Animal {
 
     public int getX() {
         return x;
-    }
+    } //to get X coordinate
 
     public int getY() {
         return y;
+    }//to get Y coordinate
+
+    public void setX(int x) {
+        this.x = x;
+    }
+
+    public void setY(int y) {
+        this.y = y;
     }
 
     @Override
@@ -104,12 +113,6 @@ public class Animal {
 
     public void move() {
 
-        int step_for_x = 1;
-        int step_for_y = 1;
-
-        this.make_shift(step_for_x, step_for_y);
-
-        System.out.println("Энимал переместился в другую ячейку: x = " + x + ", y = " + y);
     }
 
     public void make_shift(int x, int y) {
@@ -128,18 +131,18 @@ public class Animal {
         } else step_for_y = -1*step_for_y;
 
         //ограничение по оси х в 160 клеток
-        if ((this.x + step_for_x + 1) > Params.x) {
-            this.x = this.x - step_for_x;
-        } else if ((this.x + step_for_x) < 0) {
-            this.x = this.x - step_for_x;
-        } else this.x = this.x + step_for_x;
+        if ((this.getX() + step_for_x + 1) > Params.x) {
+            this.setX(this.getX() - step_for_x);
+        } else if ((this.getX() + step_for_x) < 0) {
+            this.setX(this.getX() - step_for_x);
+        } else this.setX(this.getX() + step_for_x);
 
         //ограничение по оси у в 20 клеток
-        if ((this.y + step_for_y + 1) > Params.y) {
-            this.y = this.y - step_for_y;
-        } else if ((this.y + step_for_y) < 0) {
-            this.y = this.y - step_for_y;
-        } else this.y = this.y + step_for_y;
+        if ((this.getY() + step_for_y + 1) > Params.y) {
+            this.setY(this.getY() - step_for_y);
+        } else if ((this.getY() + step_for_y) < 0) {
+            this.setY(this.getY() - step_for_y);
+        } else this.setY(this.getY() + step_for_y);
 
     }
 
@@ -151,9 +154,6 @@ public class Animal {
     public Animal reproduce(Animal mom, Animal dad) {
 
         Animal animal  = Farm.Birth("Animals", mom, dad);
-        this.readytosex = false;
-
-        System.out.println("Родился энимал в локации у родителей "+mom+" и "+dad);
 
         return animal;
 
@@ -169,6 +169,10 @@ public class Animal {
 
     public int getSatiety() {
         return this.satiety;
+    }
+
+    public void setSatiety(int satiety) {
+        this.satiety = Math.min((this.satiety + satiety), max_satiety);
     }
 
     public int getAge() {
@@ -200,7 +204,7 @@ public class Animal {
         return readytosex;
     }
 
-    public boolean isHadlunch() {
+    public boolean isJustHadlunch() {
         return hadlunch;
     }
 
@@ -221,9 +225,14 @@ public class Animal {
     }
 
     public void remove_if_dead(int x, int y) {
+
     }
 
     public void setSatiety(double v) {
+    }
+
+    public void hunger(int miss_lunch){
+        this.satiety = this.satiety + miss_lunch;
     }
 
 /*    public void check_if_alive(){

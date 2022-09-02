@@ -1,9 +1,10 @@
 package Animal.Carnivores;
+
 import Animal.Animal;
 
 public abstract class Carnivores extends Animal {
 
-    boolean carnivore=true;
+    boolean carnivore = true;
 
     public boolean isCarnivore() {
         return carnivore;
@@ -19,14 +20,7 @@ public abstract class Carnivores extends Animal {
     }
 
     @Override
-    public void devour(Animal another_animal) {
-
-        this.satiety = this.satiety+1;
-        this.setHadlunch(true);
-        another_animal.satiety = 0;
-        another_animal.alive = false;
-
-    }
+    public abstract void devour(Animal another_animal);
 
     @Override
     public void move() {

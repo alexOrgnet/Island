@@ -1,6 +1,7 @@
 package Techno;
 
 import Animal.Animal;
+import Animal.Carnivores.Bear;
 import Animal.Carnivores.Wolf;
 import Animal.Herbivores.Horse;
 import Island.IslandMap;
@@ -39,7 +40,7 @@ public class Stats {
             }
         }
         System.out.println("Общее количество волков \uD83D\uDC3A " + Wolf.total_number);
-       // System.out.println("Общее количество медведей \uD83D\uDC3B " + Wolf.total_number);
+        System.out.println("Общее количество медведей \uD83D\uDC3B " + Bear.total_number);
         System.out.println("Общее количество лощадей \uD83D\uDC0E " + Horse.total_number);
 
         //System.out.println("Общее количество кроликов \uD83D\uDC07 " + Horse.total_number);

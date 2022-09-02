@@ -34,14 +34,12 @@ public class Cleansing {
                         //for (Animal a : island[x][y]) {
                         for (Animal a : copy1) {
 
-                            if (!a.alive) {
+                            if (!a.getAlive()) {
                                 a.remove_if_dead(x,y);
-                                System.out.println("Cleaning: В данной части острова "+x+":"+y+" найдено мертвое животное " + a.getName());
+                                //System.out.println("Cleaning: В данной части острова "+x+":"+y+" найдено мертвое животное " + a.getName()+" "+a.hashCode());
                                 island[x][y].remove(a);
 
-                            }
-
-                            //else if (a.alive) System.out.println("Cleaning: В данной части острова "+x+":"+y+" найдено живое животное " + a.getName()+" с возрастом "+ a.getAge());
+                            } //else System.out.println("Cleaning: В данной части острова "+x+":"+y+" найдено живое животное " + a.getName()+" "+a.hashCode()+" с возрастом "+ a.getAge());
                     }
                     } catch (NullPointerException e) {
                         //e.printStackTrace();

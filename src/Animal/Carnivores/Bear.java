@@ -5,9 +5,9 @@ import Techno.Event;
 import Techno.Params;
 
 
-public class Wolf extends Carnivores {
+public class Bear extends Carnivores {
 
-    public String name = "Волк";
+    public String name = "Медведь";
     public static int max_count_per_cell = 5; //максимальное количество животных в ячейке
 
     public static int weight = 50; //вес животного
@@ -22,8 +22,7 @@ public class Wolf extends Carnivores {
     public int satiety; //if 0 the animal is dead
 
     public static int[][] count_in_cell = new int[Params.x][Params.y];
-
-    public Wolf(String name, int x, int y, boolean atbirth) {
+    public Bear(String name, int x, int y, boolean atbirth) {
         super(name, x, y, atbirth);
         this.name = name;
         this.x = x;
@@ -33,7 +32,7 @@ public class Wolf extends Carnivores {
         this.baby = atbirth;
         this.readytosex = !atbirth;
 
-        Wolf.total_number += 1;
+        total_number += 1;
 
         this.min_child = 1;
         this.max_child = 2;
@@ -59,7 +58,7 @@ public class Wolf extends Carnivores {
     public Animal reproduce(Animal mom, Animal dad) {
 
 
-        Wolf animal = (Wolf) Farm.Birth("Волк", mom, dad);
+        Bear animal = (Bear) Farm.Birth("Медведь", mom, dad);
 
         return animal;
 
@@ -67,7 +66,7 @@ public class Wolf extends Carnivores {
 
     @Override
     public String toString() {
-        return "Wolf {" +
+        return "Медведь {" +
                 "name='" + this.name + '\'' +
                 ", hash='" + this.hashCode() + '\'' +
                 ", carnivore='" + this.carnivore + '\'' +
@@ -90,10 +89,10 @@ public class Wolf extends Carnivores {
             another_animal.setAlive(false);
             another_animal.remove_if_dead(this.x, this.y);
 
-            this.satiety = Math.min((this.satiety + 1), Wolf.max_satiety);
+            this.satiety = Math.min((this.satiety + 1), Bear.max_satiety);
             this.setHadlunch(true);
 
-            System.out.println("Волк " + this.hashCode() + " съел " + another_animal.getName() + " " + another_animal.hashCode() + " в локации x = " + this.x + ", y = " + this.y);
+            System.out.println("Медведь " + this.hashCode() + " съел " + another_animal.getName() + " " + another_animal.hashCode() + " в локации x = " + this.x + ", y = " + this.y);
 
 
     }
@@ -104,14 +103,14 @@ public class Wolf extends Carnivores {
         int step_for_x = Event.rnd(1, 2);
         int step_for_y = Event.rnd(1, 2);
 
-        Wolf.count_in_cell[this.x][this.y] = Wolf.count_in_cell[this.x][this.y] - 1; //меняем статистику по количеству животного данного вида в ячейке острова
+        Bear.count_in_cell[this.x][this.y] = Bear.count_in_cell[this.x][this.y] - 1; //меняем статистику по количеству животного данного вида в ячейке острова
 
         this.make_shift(step_for_x, step_for_y);
 
         //Wolf.count_in_cell[step_for_x][step_for_y] = Wolf.count_in_cell[step_for_x][step_for_y] + 1; //меняем статистику по количеству животного данного вида в ячейке острова
-        Wolf.count_in_cell[this.x][this.y] = Wolf.count_in_cell[this.x][this.y] + 1; //меняем статистику по количеству животного данного вида в ячейке острова
+        Bear.count_in_cell[this.x][this.y] = Bear.count_in_cell[this.x][this.y] + 1; //меняем статистику по количеству животного данного вида в ячейке острова
 
-        System.out.println("Волк " + this.hashCode() + " переместился в другую ячейку x = " + this.x + ", y = " + this.y);
+        System.out.println("Медведь " + this.hashCode() + " переместился в другую ячейку x = " + this.x + ", y = " + this.y);
 
     }
 
@@ -120,9 +119,9 @@ public class Wolf extends Carnivores {
 
         total_number = total_number - 1;
 
-        Wolf.count_in_cell[x][y] = Wolf.count_in_cell[x][y] - 1;
+        Bear.count_in_cell[x][y] = Bear.count_in_cell[x][y] - 1;
 
-        System.out.println("Погиб волк " + this.hashCode() + " в ячейке x = " + this.x + ", y = " + this.y);
+        System.out.println("Погиб медведь " + this.hashCode() + " в ячейке x = " + this.x + ", y = " + this.y);
     }
 
 }

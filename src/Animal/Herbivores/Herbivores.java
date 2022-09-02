@@ -9,13 +9,8 @@ public class Herbivores extends Animal {
     public void eat() {
 
     }
-
-    @Override
-    public void move() {
-        int step_for_x = 1;
-        int step_for_y = 1;
-
-        this.make_shift(step_for_x, step_for_y);
-
+    public Herbivores(String name, int x, int y, boolean birth) {
+        super(name, x, y, birth);
+        this.carnivore = true;
     }
 }

@@ -85,21 +85,27 @@ public class IslandMap {
         //готовим список для животных
         List<Animal> list_animals = new ArrayList<>();
 
-        for (int i=0;i<3;i++){
+        for (int i=0;i<5;i++){
 
-           Animal wolf1 = Farm.Buy("Wolf", 5, 5);
+           Animal wolf1 = Farm.Buy("Волк", 5, 5);
             list_animals.add(wolf1);
         }
 
-        for (int i=0;i<10;i++){
+        for (int i=0;i<15;i++){
 
-            Animal horse = Farm.Buy("Horse", 5, 5);
+            Animal horse = Farm.Buy("Лошадь", 5, 5);
             list_animals.add(horse);
 
         }
 
+        for (int i=0;i<5;i++){
 
-        karta[5][5] = list_animals;
+            Animal bear = Farm.Buy("Медведь", 5, 5);
+            list_animals.add(bear);
+
+        }
+
+        karta[5][5] = list_animals;//первичное размещение животных в единой ячейке
 
     }
 
@@ -130,7 +136,7 @@ public class IslandMap {
 
                         if (a.getSatiety() == 10) continue;//пропускаем сытое животное
 
-                        if ((a.getSatiety() > Params.getFullsatiety()) || (a.isHadlunch())) continue; //животное сытое и только что поело
+                        if ((a.getSatiety() > Params.getFullsatiety()) || (a.isJustHadlunch())) continue; //животное сытое и только что поело
 
                         a.eat();//травоядное животное пощипало травку
                         //plants[x][y] = plants[x][y] + Plant.grazed(a);
@@ -165,13 +171,15 @@ public class IslandMap {
 
                         if (!a.getCarnivore()) continue;//пропускаем травоядное животное
 
-                        if (!a.isBaby()) continue;//пропускаем детеныша животного, который пока не умеет охотиться
+                        if (a.isBaby()) continue;//пропускаем детеныша животного, который пока не умеет охотиться
 
-                        if ((a.getSatiety() > Params.getFullsatiety()) || (a.isHadlunch())) continue; //пропускаем охоту если хищник сыт или только что поел
+                        if ((a.getSatiety() > Params.getFullsatiety()) || (a.isJustHadlunch())) continue; //пропускаем охоту если хищник сыт или только что поел
 
                         for (Animal b : copy2) {
 
                             if (!b.getAlive()) continue;//пропускаем мертвое животное
+
+                            if (b.getCarnivore()) continue;//пропускаем хищное животное
 
                             if (a.equals(b)) {
                                 //пропускаем так как оба объекта одинаковые
@@ -179,13 +187,18 @@ public class IslandMap {
 
                                 if (a.getCarnivore() && !b.getCarnivore()) {
 
-                                    if ((a.getSatiety() > Params.getFullsatiety()) || (a.isHadlunch()))
-                                        //животное сытое и тольк что поело
+                                    if ((a.getSatiety() > Params.getFullsatiety()) || (a.isJustHadlunch()))
+                                        //животное сытое и только что поело
                                         continue;//пропускаем сытое животное
 
-                                    a.devour(b);//хищник съел травоядное
+                                    if (Event.probability_to_be_eaten(a, b)) {
+                                        //вероятность с какой хищник может съесть другое животное
+                                        a.devour(b);//хищник съел травоядное
+                                        karta[x][y].remove(b);//удаляем съеденное животное из карты острова
 
-                                    break;
+                                        break;
+
+                                    }
                                 }
                             }
                         }
@@ -236,9 +249,8 @@ public class IslandMap {
 
                                     for (int i=0;i<number_children;i++){
                                         Animal baby = a.reproduce(a, b);
-                                        karta[x][y].add(baby);
+                                        if (!karta[x][y].contains(baby)) karta[x][y].add(baby);
                                     }
-
 
                                     break;
                                 }
@@ -258,6 +270,8 @@ public class IslandMap {
         for (int x = 0; x < Params.x; x++) {
             for (int y = 0; y < Params.y; y++) {
 
+                plants[x][y] = Math.max(plants[x][y],10); //максимальное значение 10 растений
+
                 try {
 
                     List<Animal> copy1 = new ArrayList<>();
@@ -268,23 +282,31 @@ public class IslandMap {
                         if (!a.getAlive()) {
                             //пропускаем мертвое животное
                             //continue;
-
+                            a.remove_if_dead(x,y);
+                            karta[x][y].remove(a);//убираем животное из старой локации
 
                         }else {
 
-                            if (!a.isHadlunch() && a.getSatiety()<=0) {a.setAlive(false); continue;}; //если животное голодное и не ело, то оно умирает
+                            if (!a.isJustHadlunch() && a.getSatiety()<=0) {
+                                    a.setAlive(false);
+                                    //пропускаем мертвое животное
+                                    //continue;
+                                    a.remove_if_dead(x,y);
+                                    karta[x][y].remove(a);//убираем животное из старой локации
+                                continue;
+                            }; //если животное голодное и не ело, то оно умирает
+
                             a.setAge(1); //животное прожило еще 1 год
                             a.setBaby(false); //уже не детеныш на следующем цикле
                             a.setHadlunch(false); //пока не было еды на следующем цикле
                             a.setReadytosex(true); //животное готово к спариванию на следующем цикле
-                            a.setHadlunch(false); //животное готово к приему пищи на следующем цикле
 
-                            a.setSatiety(a.getSatiety()-0.5) ;
+                            a.hunger(-1) ; //животное проголодалось
                             //теперь делаем движение для всех животных
 
                             a.move();
 
-                            karta[a.getX()][a.getY()].add(a); //добавляем животное в новую локацию
+                            if (!karta[a.getX()][a.getY()].contains(a)) karta[a.getX()][a.getY()].add(a); //добавляем животное в новую локацию если его там не было
                             karta[x][y].remove(a);//убираем животное из старой локации
                         }
                      }
