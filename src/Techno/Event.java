@@ -13,4 +13,15 @@ public final class Event {
             return true;
         } else return false;
     }
+
+    /**
+     * Метод получения псевдослучайного целого числа от min до max (включая max);
+     */
+    public static int rnd(int min, int max)
+    {
+        max -= min;
+        return (int) (Math.random() * ++max) + min;
+    }
+
+
 }

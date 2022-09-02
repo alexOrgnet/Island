@@ -12,6 +12,10 @@ public class Herbivores extends Animal {
 
     @Override
     public void move() {
-        super.move();
+        int step_for_x = 1;
+        int step_for_y = 1;
+
+        this.make_shift(step_for_x, step_for_y);
+
     }
 }

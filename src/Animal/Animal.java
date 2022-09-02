@@ -40,7 +40,10 @@ public class Animal {
         return name;
     }
 
+    public int min_child = 0;
+    public int max_child = 0;
 
+    public static int max_satiety =0; //maximum allowed satiety
     public static int[][] count_in_cell = new int[Params.x][Params.y];
 
     public Animal(String name, int x, int y, boolean birth) {
@@ -58,6 +61,18 @@ public class Animal {
 
     public Animal() {
 
+    }
+
+    public int getMin_child() {
+        return this.min_child;
+    }
+
+    public int getMax_child() {
+        return this.max_child;
+    }
+
+    public static int getMax_satiety() {
+        return max_satiety;
     }
 
     public boolean getAlive() {
@@ -94,13 +109,13 @@ public class Animal {
 
         this.make_shift(step_for_x, step_for_y);
 
-
+        System.out.println("Энимал переместился в другую ячейку: x = " + x + ", y = " + y);
     }
 
     public void make_shift(int x, int y) {
 
-        int step_for_x = 1;
-        int step_for_y = 1;
+        int step_for_x = x;
+        int step_for_y = y;
 
         boolean probability_of_direction_x = Event.probability(50);
         boolean probability_of_direction_y = Event.probability(50);
@@ -113,18 +128,18 @@ public class Animal {
         } else step_for_y = -1*step_for_y;
 
         //ограничение по оси х в 160 клеток
-        if ((x + step_for_x) > Params.x) {
-            this.x = x - step_for_x;
-        } else if ((x + step_for_x) < 0) {
-            this.x = x - step_for_x;
-        } else this.x = x + step_for_x;
+        if ((this.x + step_for_x + 1) > Params.x) {
+            this.x = this.x - step_for_x;
+        } else if ((this.x + step_for_x) < 0) {
+            this.x = this.x - step_for_x;
+        } else this.x = this.x + step_for_x;
 
         //ограничение по оси у в 20 клеток
-        if ((y + step_for_y) > Params.y) {
-            this.y = y - step_for_y;
-        } else if ((y + step_for_y) < 0) {
-            this.y = y - step_for_y;
-        } else this.y = y + step_for_y;
+        if ((this.y + step_for_y + 1) > Params.y) {
+            this.y = this.y - step_for_y;
+        } else if ((this.y + step_for_y) < 0) {
+            this.y = this.y - step_for_y;
+        } else this.y = this.y + step_for_y;
 
     }
 
@@ -205,9 +220,11 @@ public class Animal {
         this.baby = baby;
     }
 
-    public void remove_if_dead() {
+    public void remove_if_dead(int x, int y) {
     }
 
+    public void setSatiety(double v) {
+    }
 
 /*    public void check_if_alive(){
 

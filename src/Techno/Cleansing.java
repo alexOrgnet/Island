@@ -35,7 +35,7 @@ public class Cleansing {
                         for (Animal a : copy1) {
 
                             if (!a.alive) {
-                                a.remove_if_dead();
+                                a.remove_if_dead(x,y);
                                 System.out.println("Cleaning: В данной части острова "+x+":"+y+" найдено мертвое животное " + a.getName());
                                 island[x][y].remove(a);
 

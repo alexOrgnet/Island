@@ -2,6 +2,7 @@ package Island;
 import Animal.Animal;
 import FarmBuilder.Farm;
 import Plants.Plant;
+import Techno.Event;
 import Techno.Params;
 
 import java.util.ArrayList;
@@ -16,11 +17,13 @@ public class IslandMap {
     }
 
 
-    public static int[][] plants = new int[Params.x][Params.y];
+    public int[][] plants = new int[Params.x][Params.y];
 
-    public static int[][] getPlants() {
+    public int[][] getPlants() {
         return plants;
     }
+
+    public int number_of_life_cycles;
 
     public IslandMap() {
     }
@@ -79,35 +82,24 @@ public class IslandMap {
 
     public void animal_creation() {
 
-
+        //готовим список для животных
         List<Animal> list_animals = new ArrayList<>();
 
-        Animal animal = Farm.Buy("Wolf", 1, 1);
+        for (int i=0;i<3;i++){
 
-        list_animals.add(animal);
+           Animal wolf1 = Farm.Buy("Wolf", 5, 5);
+            list_animals.add(wolf1);
+        }
 
-        Animal animal2 = Farm.Buy("Wolf", 1, 1);
+        for (int i=0;i<10;i++){
 
-        list_animals.add(animal2);
+            Animal horse = Farm.Buy("Horse", 5, 5);
+            list_animals.add(horse);
 
-        Animal animal3 = Farm.Buy("Horse", 1, 1);
-
-        list_animals.add(animal3);
-
-        Animal animal4 = Farm.Buy("Horse", 1, 1);
-
-        list_animals.add(animal4);
-
-        Animal animal5 = Farm.Buy("Horse", 1, 1);
-
-        list_animals.add(animal5);
-
-        Animal animal6 = Farm.Buy("Horse", 1, 1);
-
-        list_animals.add(animal6);
+        }
 
 
-        karta[1][1] = list_animals;
+        karta[5][5] = list_animals;
 
     }
 
@@ -115,8 +107,8 @@ public class IslandMap {
     public void pastures() {
 
         //первый процесс внутри ячейки острова. Пастбища
-        for (int x = 0; x < 10; x++) {
-            for (int y = 0; y < 10; y++) {
+        for (int x = 0; x < Params.x; x++) {
+            for (int y = 0; y < Params.y; y++) {
 
 
                 try {
@@ -141,7 +133,7 @@ public class IslandMap {
                         if ((a.getSatiety() > Params.getFullsatiety()) || (a.isHadlunch())) continue; //животное сытое и только что поело
 
                         a.eat();//травоядное животное пощипало травку
-                        plants[x][y] = plants[x][y] + Plant.grazed(a);
+                        //plants[x][y] = plants[x][y] + Plant.grazed(a);
 
                     }
                 } catch (NullPointerException e) {
@@ -153,8 +145,8 @@ public class IslandMap {
 
     public void hunting() {
         //второй процесс внутри ячейки острова. Питание хищников
-        for (int x = 0; x < 10; x++) {
-            for (int y = 0; y < 10; y++) {
+        for (int x = 0; x < Params.x; x++) {
+            for (int y = 0; y < Params.y; y++) {
 
 
                 try {
@@ -171,6 +163,12 @@ public class IslandMap {
 
                         if (!a.getAlive()) continue;//пропускаем мертвое животное
 
+                        if (!a.getCarnivore()) continue;//пропускаем травоядное животное
+
+                        if (!a.isBaby()) continue;//пропускаем детеныша животного, который пока не умеет охотиться
+
+                        if ((a.getSatiety() > Params.getFullsatiety()) || (a.isHadlunch())) continue; //пропускаем охоту если хищник сыт или только что поел
+
                         for (Animal b : copy2) {
 
                             if (!b.getAlive()) continue;//пропускаем мертвое животное
@@ -179,13 +177,13 @@ public class IslandMap {
                                 //пропускаем так как оба объекта одинаковые
                             } else {
 
-                                if (a.carnivore && !b.carnivore) {
+                                if (a.getCarnivore() && !b.getCarnivore()) {
 
                                     if ((a.getSatiety() > Params.getFullsatiety()) || (a.isHadlunch()))
                                         //животное сытое и тольк что поело
                                         continue;//пропускаем сытое животное
 
-                                    a.devour(a);//хищник съел травоядное
+                                    a.devour(b);//хищник съел травоядное
 
                                     break;
                                 }
@@ -201,8 +199,8 @@ public class IslandMap {
 
     //третий процесс внутри ячейки острова. Размножение животных
     public void breeding() {
-        for (int x = 0; x < 10; x++) {
-            for (int y = 0; y < 10; y++) {
+        for (int x = 0; x < Params.x; x++) {
+            for (int y = 0; y < Params.y; y++) {
 
                 try {
 
@@ -213,9 +211,6 @@ public class IslandMap {
                     List<Animal> copy2 = new ArrayList<>();
                     copy2.addAll(karta[x][y]);
 
-
-                    //добавляем траву. трава растет и увеличивается в два раза за один цикл
-                    plants[x][y] = plants[x][y] * 2;
 
 
                     //второй процесс внутри ячейки острова. Питание травоядных
@@ -231,14 +226,19 @@ public class IslandMap {
                                 //пропускаем так как оба объекта одинаковые
                             } else {
 
-                                if (a.name == b.name) {
+                                if (a.getName() == b.getName()) {
 
                                     if (!b.isReadytosex()) continue;
 
-                                    if (!a.isReadytosex()) break;
+                                    if (!a.isReadytosex()) continue;
 
-                                    Animal baby = a.reproduce(a, b);
-                                    karta[x][y].add(baby);
+                                    int number_children = Event.rnd(a.getMin_child(),a.getMax_child());
+
+                                    for (int i=0;i<number_children;i++){
+                                        Animal baby = a.reproduce(a, b);
+                                        karta[x][y].add(baby);
+                                    }
+
 
                                     break;
                                 }
@@ -255,8 +255,8 @@ public class IslandMap {
 
     public void preparing_next_cycle() {
         //подготавливаем животных к новому циклу
-        for (int x = 0; x < 10; x++) {
-            for (int y = 0; y < 10; y++) {
+        for (int x = 0; x < Params.x; x++) {
+            for (int y = 0; y < Params.y; y++) {
 
                 try {
 
@@ -279,6 +279,7 @@ public class IslandMap {
                             a.setReadytosex(true); //животное готово к спариванию на следующем цикле
                             a.setHadlunch(false); //животное готово к приему пищи на следующем цикле
 
+                            a.setSatiety(a.getSatiety()-0.5) ;
                             //теперь делаем движение для всех животных
 
                             a.move();

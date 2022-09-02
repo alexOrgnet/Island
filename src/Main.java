@@ -21,24 +21,29 @@ public class Main {
         //инициализация острова, создание карты
         islandMap.island_initialization();
 
-        //запускаем периодический сбор статистики
-        ScheduledExecutorService executorService = Executors.newScheduledThreadPool(2);
-        executorService.scheduleAtFixedRate(new ThrPool.Tasks(), 0, 3, TimeUnit.SECONDS);
-
-
         //инициализация острова, создание растительности
         islandMap.plant_initialization();
 
         //первичное размещение животных
         islandMap.animal_creation();
 
+
+        //запускаем периодический сбор статистики
+
+        ScheduledExecutorService executorService = Executors.newScheduledThreadPool(2);
+        executorService.scheduleAtFixedRate(new ThrPool.Tasks(), 0, 3, TimeUnit.SECONDS);
+
+        if (islandMap.number_of_life_cycles > Params.getCycles()) executorService.shutdown();
+
+
+
         //получаем параметры игры: количество циклов
-        int cycles = Params.getCycles();
 
         //запускаем жизненный цикл
-        for (int i = 0; i < cycles; i++) {
+        for (int i = 0; i < Params.getCycles(); i++) {
 
             System.out.println("И настал день № " + (i + 1));
+
 
             //выпас травоядных животных
             Pastures t1 = new Pastures();
@@ -53,18 +58,21 @@ public class Main {
             t3.run();
 
 
+
             //собираем статистику
-/*
+
             Stats stats = Stats.getInstance();
-            stats.showStatistic(island);
+            stats.showStatistic(islandMap);
 
             //удаляем старые данные
             Cleansing clean = Cleansing.getInstance();
-            clean.cleanStaff(island);
-*/
+            clean.cleanStaff(islandMap);
+
             //подготовка к следующему циклу жизни
             islandMap.preparing_next_cycle();
 
         }
+
+
     }
 }

@@ -18,14 +18,15 @@ public abstract class Carnivores extends Animal {
         return super.reproduce(mom, dad);
     }
 
+    @Override
     public void devour(Animal another_animal) {
 
         this.satiety = this.satiety+1;
+        this.setHadlunch(true);
         another_animal.satiety = 0;
         another_animal.alive = false;
 
     }
-
 
     @Override
     public void move() {

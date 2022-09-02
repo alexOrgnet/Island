@@ -22,8 +22,8 @@ public class Stats {
         List<Animal>[][] island;
         island = o.getKarta();
 
-        for (int x = 0; x < 10; x++) {
-            for (int y = 0; y < 10; y++) {
+        for (int x = 0; x < Params.x; x++) {
+            for (int y = 0; y < Params.y; y++) {
 
 
                 try {
@@ -38,8 +38,16 @@ public class Stats {
                 }
             }
         }
-        System.out.println("Общее количество волков " + Wolf.total_number);
-        System.out.println("Общее количество лошадей " + Horse.total_number);
-        System.out.println("Общее количество animal " + Animal.total_number);
+        System.out.println("Общее количество волков \uD83D\uDC3A " + Wolf.total_number);
+       // System.out.println("Общее количество медведей \uD83D\uDC3B " + Wolf.total_number);
+        System.out.println("Общее количество лощадей \uD83D\uDC0E " + Horse.total_number);
+
+        //System.out.println("Общее количество кроликов \uD83D\uDC07 " + Horse.total_number);
+        //System.out.println("Общее количество уток \uD83E\uDD86 " + Horse.total_number);
+        //System.out.println("Общее количество змей \uD83D\uDC0D " + Horse.total_number);
+
+
+        //System.out.println("Общее количество animal " + Animal.total_number);
+        //System.out.println("🐺");
     }
 }

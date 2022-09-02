@@ -38,14 +38,14 @@ public final class Farm {
             return new Animal("Animal", x, y, false);
         }else if (clsType == "Wolf"){
             if (Wolf.count_in_cell[x][y] >= Wolf.max_count_per_cell ) {
-                System.out.println("Достигнуто максимальное число "+Wolf.class+" в ячейке X "+x+ ":"+ y);
+                System.out.println("Достигнуто максимальное число волков в ячейке X: "+x+ ", Y:"+ y);
             } else {
                 Wolf.count_in_cell[x][y] ++;
                 return new Wolf("Wolf", x, y, false);
             }
         } else if (clsType == "Horse"){
             if (Horse.count_in_cell[x][y] >= Horse.max_count_per_cell ) {
-                System.out.println("Достигнуто максимальное число " + Horse.class + " в ячейке X " + x + ":" + y);
+                System.out.println("Достигнуто максимальное число лошадей в ячейке X: " + x + ", Y:" + y);
             } else {
                 Horse.count_in_cell[x][y] ++;
                 return new Horse("Horse", x, y, true);
