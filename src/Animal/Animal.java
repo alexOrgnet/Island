@@ -1,4 +1,5 @@
 package Animal;
+
 import Animal.Carnivores.Carnivores;
 import Animal.Herbivores.Horse;
 import FarmBuilder.Farm;
@@ -9,6 +10,7 @@ public class Animal {
 
     public String name = "animal";
 
+    public boolean completed_turn; //признак завершения хода
     public boolean alive = true;
 
     public void setAlive(boolean alive) {
@@ -18,10 +20,12 @@ public class Animal {
     protected int x = 0; //coordinates x
     protected int y = 0; //coordinates y
 
-    protected int age = 0; //number of cycles alive
+    protected int age; //number of cycles alive
+
+    protected static int speed; //speed of the move
 
     int weight = 0; //вес животного
-    public int satiety = 0; //if 0 the animal is dead
+    public double satiety; //if 0 the animal is dead
 
     public boolean carnivore = false;
 
@@ -44,7 +48,7 @@ public class Animal {
     public int min_child = 0;
     public int max_child = 0;
 
-    public static int max_satiety =0; //maximum allowed satiety
+    public double max_satiety = 0; //maximum allowed satiety
 
 
     public Animal(String name, int x, int y, boolean birth) {
@@ -72,8 +76,14 @@ public class Animal {
         return this.max_child;
     }
 
-    public static int getMax_satiety() {
-        return max_satiety;
+    public double getMax_satiety() {
+        return this.max_satiety;
+    }
+
+    public int food_stuff_to_full_satiety; //пища необходимая для полного насыщения
+
+    public int getFood_stuff_to_full_satiety() {
+        return food_stuff_to_full_satiety;
     }
 
     public boolean getAlive() {
@@ -107,7 +117,7 @@ public class Animal {
                 ", ready to sex='" + this.readytosex + '\'' +
                 ", age='" + this.age + '\'' +
                 //", type='" + getClass() + '\'' +
-                ", location= x=" + this.x + " у ="+this.y+'\'' +
+                ", location= x=" + this.x + " у =" + this.y + '\'' +
                 '}';
     }
 
@@ -125,10 +135,10 @@ public class Animal {
 
         //вероятность пойти вправо или лево
         if (probability_of_direction_x == true) {
-        } else step_for_x = -1*step_for_x;
+        } else step_for_x = -1 * step_for_x;
         //вероятность пойти вверх или вниз
         if (probability_of_direction_y == true) {
-        } else step_for_y = -1*step_for_y;
+        } else step_for_y = -1 * step_for_y;
 
         //ограничение по оси х в 160 клеток
         if ((this.getX() + step_for_x + 1) > Params.x) {
@@ -151,9 +161,17 @@ public class Animal {
 
     }
 
+    public void setCompleted_turn(boolean completed_turn) {
+        this.completed_turn = completed_turn;
+    }
+
+    public boolean isCompleted_turn() {
+        return completed_turn;
+    }
+
     public Animal reproduce(Animal mom, Animal dad) {
 
-        Animal animal  = Farm.Birth("Animals", mom, dad);
+        Animal animal = Farm.Birth("Animals", mom, dad);
 
         return animal;
 
@@ -167,11 +185,11 @@ public class Animal {
     public void devour(Animal a) {
     }
 
-    public int getSatiety() {
+    public double getSatiety() {
         return this.satiety;
     }
 
-    public void setSatiety(int satiety) {
+    public void setSatiety(double satiety) {
         this.satiety = Math.min((this.satiety + satiety), max_satiety);
     }
 
@@ -180,7 +198,7 @@ public class Animal {
     }
 
     public void setAge(int age) {
-        this.age = this.age+age;
+        this.age = this.age + age;
     }
 
     public boolean isAlive() {
@@ -228,12 +246,12 @@ public class Animal {
 
     }
 
-    public void setSatiety(double v) {
+
+    public void hunger() {
+
+        this.setSatiety(Math.max((this.getSatiety()-Params.getFullsatiety()/3), 0));
     }
 
-    public void hunger(int miss_lunch){
-        this.satiety = this.satiety + miss_lunch;
-    }
 
 /*    public void check_if_alive(){
 

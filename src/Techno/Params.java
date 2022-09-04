@@ -1,22 +1,26 @@
 package Techno;
 
-public class Params {
+public final class Params {
 
-    private static int cycles = 6; //number of cycles
+    private static int cycles = 10; //number of cycles
 
-    private static  int fullsatiety = 10; //full satiety
+    private static int fullsatiety = 10; //full animal satiety
+
+    public static int satiety_at_birth = 2; //at birth animal satiety
 
     public static int getCycles() {
         return cycles;
     }
 
-    public static int getFullsatiety() {
+    public static double getFullsatiety() {
         return fullsatiety;
     }
 
-    public static int x = 10; //размерность острова по Х
 
-    public static int y = 10; //размерность острова по У
+    public static int x = 100; //размерность острова по Х
 
-    public static int plants = 10; //количество растений на ячейку
+    public static int y = 20; //размерность острова по У
+
+
+
 }

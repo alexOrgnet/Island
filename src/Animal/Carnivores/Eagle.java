@@ -1,16 +1,15 @@
 package Animal.Carnivores;
 
 import Animal.Animal;
-import Animal.Herbivores.Horse;
 import FarmBuilder.Farm;
 import Techno.Event;
 import Techno.Params;
 
 
-public class Wolf extends Carnivores {
+public class Eagle extends Carnivores {
 
-    public String name = "Волк";
-    public static int max_count_per_cell = 30; //максимальное количество животных в ячейке
+    public String name = "Орел";
+    public static int max_count_per_cell = 20; //максимальное количество животных в ячейке
 
     public int weight; //вес животного
 
@@ -58,10 +57,10 @@ public class Wolf extends Carnivores {
 
     public static int[][] count_in_cell = new int[Params.x][Params.y];
 
-    public Wolf(String name, int x, int y, boolean born) {
+    public Eagle(String name, int x, int y, boolean born) {
         super(name, x, y, born);
         this.name = name;
-        this.weight = 50;
+        this.weight = 6;
         this.x = x;
         this.y = y;
         this.carnivore = true;
@@ -69,15 +68,15 @@ public class Wolf extends Carnivores {
         this.baby = born;
         this.readytosex = !born;
 
-        Wolf.total_number += 1;
+        Eagle.total_number += 1;
 
         this.min_child = 2;
         this.max_child = 4;
 
         this.max_satiety = Params.getFullsatiety();
-        this.food_stuff_to_full_satiety = 8;
+        this.food_stuff_to_full_satiety = 1;
 
-        //Wolf.count_in_cell[this.x][this.y] =  Wolf.count_in_cell[this.x][this.y] + 1;
+        //Eagle.count_in_cell[this.x][this.y] =  Eagle.count_in_cell[this.x][this.y] + 1;
 
     }
 
@@ -98,7 +97,7 @@ public class Wolf extends Carnivores {
     public Animal reproduce(Animal mom, Animal dad) {
 
 
-        Wolf animal = (Wolf) Farm.Birth("Волк", mom, dad);
+        Eagle animal = (Eagle) Farm.Birth("Орел", mom, dad);
 
         return animal;
 
@@ -106,7 +105,7 @@ public class Wolf extends Carnivores {
 
     @Override
     public String toString() {
-        return "Волк {" +
+        return "Орел {" +
                 "name='" + this.name + '\'' +
                 ", hash='" + this.hashCode() + '\'' +
                 ", carnivore='" + this.carnivore + '\'' +
@@ -128,13 +127,13 @@ public class Wolf extends Carnivores {
         another_animal.setAlive(false);
         another_animal.remove_if_dead(this.x, this.y);
 
-        //this.satiety = Math.min((this.satiety + 1), Wolf.max_satiety);
+        //this.satiety = Math.min((this.satiety + 1), Eagle.max_satiety);
 
         int increase_in_satiety = (Math.min((int)another_animal.getWeight()/this.getFood_stuff_to_full_satiety() * Params.getFullsatiety(), Params.getFullsatiety()));
-        this.setSatiety(Math.min((this.getSatiety() + increase_in_satiety), Wolf.max_satiety));
+        this.setSatiety(Math.min((this.getSatiety() + increase_in_satiety), Eagle.max_satiety));
         this.setHadlunch(true);
 
-        //System.out.println("Волк " + this.hashCode() + " съел " + another_animal.getName() + " " + another_animal.hashCode() + " в локации x = " + this.x + ", y = " + this.y);
+        //System.out.println("Орел " + this.hashCode() + " съел " + another_animal.getName() + " " + another_animal.hashCode() + " в локации x = " + this.x + ", y = " + this.y);
 
     }
 
@@ -143,18 +142,18 @@ public class Wolf extends Carnivores {
     @Override
     public void move() {
 
-        int step_for_x = Event.rnd(1, Wolf.speed);
-        int step_for_y = Event.rnd(1, Wolf.speed);
+        int step_for_x = Event.rnd(1, Eagle.speed);
+        int step_for_y = Event.rnd(1, Eagle.speed);
 
 
-        Wolf.count_in_cell[this.x][this.y] = Wolf.count_in_cell[this.x][this.y] - 1; //меняем статистику по количеству животного данного вида в ячейке острова
+        Eagle.count_in_cell[this.x][this.y] = Eagle.count_in_cell[this.x][this.y] - 1; //меняем статистику по количеству животного данного вида в ячейке острова
 
         this.make_shift(step_for_x, step_for_y);
 
-        //Wolf.count_in_cell[step_for_x][step_for_y] = Wolf.count_in_cell[step_for_x][step_for_y] + 1; //меняем статистику по количеству животного данного вида в ячейке острова
-        Wolf.count_in_cell[this.x][this.y] = Wolf.count_in_cell[this.x][this.y] + 1; //меняем статистику по количеству животного данного вида в ячейке острова
+        //Eagle.count_in_cell[step_for_x][step_for_y] = Eagle.count_in_cell[step_for_x][step_for_y] + 1; //меняем статистику по количеству животного данного вида в ячейке острова
+        Eagle.count_in_cell[this.x][this.y] = Eagle.count_in_cell[this.x][this.y] + 1; //меняем статистику по количеству животного данного вида в ячейке острова
 
-        //System.out.println("Волк "+this.toString()+"  " + this.hashCode() + " переместился в другую ячейку x = " + this.x + ", y = " + this.y);
+        //System.out.println("Орел "+this.toString()+"  " + this.hashCode() + " переместился в другую ячейку x = " + this.x + ", y = " + this.y);
 
         this.completed_turn = true;
 
@@ -165,11 +164,11 @@ public class Wolf extends Carnivores {
     public void remove_if_dead(int x, int y) {
 
 
-        Wolf.total_number = Wolf.total_number - 1;
+        Eagle.total_number = Eagle.total_number - 1;
 
-        Wolf.count_in_cell[x][y] = Wolf.count_in_cell[x][y] - 1;
+        Eagle.count_in_cell[x][y] = Eagle.count_in_cell[x][y] - 1;
 
-        //System.out.println("Погиб волк  " + this.toString() + " " + this.hashCode() + " в ячейке x = " + this.x + ", y = " + this.y);
+        //System.out.println("Погиб орел  " + this.toString() + " " + this.hashCode() + " в ячейке x = " + this.x + ", y = " + this.y);
     }
 
 

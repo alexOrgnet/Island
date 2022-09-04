@@ -12,7 +12,7 @@ import java.util.concurrent.TimeUnit;
 
 public class Main {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
 
 
         //создаем объект острова
@@ -24,26 +24,17 @@ public class Main {
         //инициализация острова, создание растительности
         islandMap.plant_initialization();
 
-        //первичное размещение животных
+        //первичное размещение животных на острове
         islandMap.animal_creation();
 
 
-        //запускаем периодический сбор статистики
-/*
-        ScheduledExecutorService executorService = Executors.newScheduledThreadPool(2);
-        executorService.scheduleAtFixedRate(new ThrPool.Tasks(), 0, 3, TimeUnit.SECONDS);
-
-        if (islandMap.number_of_life_cycles > Params.getCycles()) executorService.shutdown();
-
-*/
-
         //получаем параметры игры: количество циклов
-
         //запускаем жизненный цикл
         for (int i = 0; i < Params.getCycles(); i++) {
 
-            System.out.println("И настал день № " + (i + 1));
+            if (Stats.totalAnimalQuanity() <= 0) break;//если закончились животные то прервыаем цикл жизни на острове
 
+            System.out.println("И настал день № " + (i + 1));
 
             Stats stats = Stats.getInstance();
             stats.showStatistic(islandMap);
@@ -65,14 +56,25 @@ public class Main {
             Cleansing clean = Cleansing.getInstance();
             clean.cleanStaff(islandMap);
 
+            //растения подрастают
+            islandMap.plant_growing();
+
+            //двигаем животных по острову
+            islandMap.moving_to_next_cell();
 
             //подготовка к следующему циклу жизни
             islandMap.preparing_next_cycle();
 
+            System.out.println("И завершился день № " + (i + 1));
             //собираем статистику
             stats.showStatistic(islandMap);
         }
 
+        //запускаем периодический сбор статистики. собираем ее 15 секунд и потом заканчиваем сбор
+        ScheduledExecutorService executorService = Executors.newScheduledThreadPool(2);
+        executorService.scheduleAtFixedRate(new ThrPool.Tasks(), 0, 3, TimeUnit.SECONDS);
 
+        Thread.currentThread().sleep(15000);
+        executorService.shutdown();
     }
 }

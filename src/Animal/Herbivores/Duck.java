@@ -1,19 +1,17 @@
 package Animal.Herbivores;
 
 import Animal.Animal;
-import Animal.Carnivores.Wolf;
 import FarmBuilder.Farm;
-import Island.IslandMap;
 import Plants.Plant;
 import Techno.Event;
 import Techno.Params;
 
-public class Horse extends Herbivores {
+public class Duck extends Herbivores {
 
-    public String name = "Лошадь";
+    public String name = "Утка";
 
     public boolean completed_turn; //признак завершения хода
-    public static int max_count_per_cell = 20; //максимальное количество животных в ячейке
+    public static int max_count_per_cell = 200; //максимальное количество животных в ячейке
 
     public static int total_number; //общее количество животных данного вида
 
@@ -52,7 +50,7 @@ public class Horse extends Herbivores {
 
     public static int[][] count_in_cell = new int[Params.x][Params.y];
 
-    public Horse(String name, int x, int y, boolean atbirth) {
+    public Duck(String name, int x, int y, boolean atbirth) {
         super(name, x, y, atbirth);
         this.x = x;
         this.y = y;
@@ -64,19 +62,19 @@ public class Horse extends Herbivores {
         this.readytosex = false;
         this.alive = true;
 
-        this.weight = 400; //вес животного
+        this.weight = 1; //вес животного
 
-        Horse.total_number += 1;
+        Duck.total_number += 1;
 
         this.min_child = 3;
         this.max_child = 6;
 
         this.max_satiety = Params.getFullsatiety();
 
-        this.food_stuff_to_full_satiety = 60;
+        this.food_stuff_to_full_satiety = 1;
 
 
-        //Horse.count_in_cell[this.x][this.y] =  Horse.count_in_cell[this.x][this.y] + 1;
+        //Duck.count_in_cell[this.x][this.y] =  Duck.count_in_cell[this.x][this.y] + 1;
     }
 
 
@@ -94,7 +92,7 @@ public class Horse extends Herbivores {
 
     @Override
     public String toString() {
-        return "Лошадь {" +
+        return "Утка {" +
                 "name='" + this.name + '\'' +
                 ", hash='" + this.hashCode() + '\'' +
                 ", carnivore='" + this.carnivore + '\'' +
@@ -121,7 +119,7 @@ public class Horse extends Herbivores {
 
             this.setHadlunch(true);
 
-            //System.out.println("Лошадь " + this.hashCode() + " пощипала траву в ячейке x = " + this.getX() + ", y = " + this.getY());
+            //System.out.println("Утка " + this.hashCode() + " пощипала траву в ячейке x = " + this.getX() + ", y = " + this.getY());
 
             Plant.plants[this.getX()][this.getY()] = Plant.plants[this.getX()][this.getY()] - (int)how_much_grass_to_eat; //
 
@@ -133,7 +131,7 @@ public class Horse extends Herbivores {
     @Override
     public Animal reproduce(Animal mom, Animal dad) {
 
-        Horse foal = (Horse) Farm.Birth("Лошадь", mom, dad);
+        Duck foal = (Duck) Farm.Birth("Утка", mom, dad);
 
         return foal;
 
@@ -142,11 +140,11 @@ public class Horse extends Herbivores {
     @Override
     public void remove_if_dead(int x, int y) {
 
-        Horse.total_number = Horse.total_number - 1;
+        Duck.total_number = Duck.total_number - 1;
 
-        Horse.count_in_cell[x][y] = Horse.count_in_cell[x][y] - 1;
+        Duck.count_in_cell[x][y] = Duck.count_in_cell[x][y] - 1;
 
-        //System.out.println("Погибла лошадь " + this.hashCode() + " в ячейке x = " + this.x + ", y = " + this.y);
+        //System.out.println("Погибла утка " + this.hashCode() + " в ячейке x = " + this.x + ", y = " + this.y);
     }
 
     @Override
@@ -161,17 +159,17 @@ public class Horse extends Herbivores {
 
     public void move() {
 
-        int step_for_x = Event.rnd(1, Horse.speed);
-        int step_for_y = Event.rnd(1, Horse.speed);
+        int step_for_x = Event.rnd(1, Duck.speed);
+        int step_for_y = Event.rnd(1, Duck.speed);
 
 
-        Horse.count_in_cell[this.x][this.y] = Horse.count_in_cell[this.x][this.y] - 1; //меняем статистику по количеству животного данного вида в ячейке острова
+        Duck.count_in_cell[this.x][this.y] = Duck.count_in_cell[this.x][this.y] - 1; //меняем статистику по количеству животного данного вида в ячейке острова
 
         this.make_shift(step_for_x, step_for_y);
 
-        Horse.count_in_cell[this.x][this.y] = Horse.count_in_cell[this.x][this.y] + 1;
+        Duck.count_in_cell[this.x][this.y] = Duck.count_in_cell[this.x][this.y] + 1;
 
-        //System.out.println("Лошадь "+this.toString()+"  "  + this.hashCode() + " переместилась в другую ячейку: x = " + this.x + ", y = " + this.y);
+        //System.out.println("Утка "+this.toString()+"  "  + this.hashCode() + " переместилась в другую ячейку: x = " + this.x + ", y = " + this.y);
 
         this.completed_turn = true;
 
@@ -183,4 +181,24 @@ public class Horse extends Herbivores {
         this.setSatiety(Math.max((this.getSatiety()-Params.getFullsatiety()/3), 0));
 
     }
+
+
+    @Override
+    public void devour(Animal another_animal){
+
+        another_animal.setAlive(false);
+        another_animal.remove_if_dead(this.x, this.y);
+
+        //this.satiety = Math.min((this.satiety + 1), Wolf.max_satiety);
+
+        double increase_in_satiety = (Math.min(another_animal.getWeight()/this.getFood_stuff_to_full_satiety() * Params.getFullsatiety(), Params.getFullsatiety()));
+        this.setSatiety(Math.min((this.getSatiety() + increase_in_satiety), this.getMax_satiety()));
+        this.setHadlunch(true);
+
+        //System.out.println("Волк " + this.hashCode() + " съел " + another_animal.getName() + " " + another_animal.hashCode() + " в локации x = " + this.x + ", y = " + this.y);
+
+    };
+
+
+
 }

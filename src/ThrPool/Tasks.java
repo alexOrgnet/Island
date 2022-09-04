@@ -12,29 +12,28 @@ public class Tasks implements Runnable {
         //System.out.println("Начало работы потока " + getName());
 
 
-
         //System.out.println("Поток " +getName() + " завершил работу.");
 
         IslandMap islandMap = IslandMap.getInstance();
 
-        islandMap.plant_growing();
+        //islandMap.plant_growing();
 
-        islandMap.pastures();
+        //islandMap.pastures();
 
-        islandMap.hunting();
+        //islandMap.hunting();
 
-        islandMap.breeding();
+        //islandMap.breeding();
 
         //islandMap.preparing_next_cycle();
 
-
+        System.out.println("Поток " +Thread.currentThread().getName() + " обновляет статистику работу.");
         Stats stats = Stats.getInstance();
         stats.showStatistic(islandMap);
 
-        Cleansing clean = Cleansing.getInstance();
-        clean.cleanStaff(islandMap);
+        //Cleansing clean = Cleansing.getInstance();
+        //clean.cleanStaff(islandMap);
 
-        islandMap.number_of_life_cycles = islandMap.number_of_life_cycles + 1;
+        //islandMap.number_of_life_cycles = islandMap.number_of_life_cycles + 1;
 
     }
 }

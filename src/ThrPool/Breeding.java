@@ -2,7 +2,7 @@ package ThrPool;
 
 import Island.IslandMap;
 
-public class Breeding extends Thread  {
+public class Breeding extends Thread {
 
     @Override
     public void run() {
