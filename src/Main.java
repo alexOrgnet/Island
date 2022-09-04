@@ -1,97 +1,80 @@
-import java.sql.SQLOutput;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import Island.IslandMap;
+import Techno.Cleansing;
+import Techno.Params;
+import Techno.Stats;
+import ThrPool.Breeding;
+import ThrPool.Hunting;
+import ThrPool.Pastures;
+
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 public class Main {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
 
 
-        int cycles = 10;
+        //создаем объект острова
+        IslandMap islandMap = IslandMap.getInstance();
 
-        List<Animal> list_animals = new ArrayList<>();
+        //инициализация острова, создание карты
+        islandMap.island_initialization();
 
-        Animal animal  = Farm.Create("Animal", 10, 10);
+        //инициализация острова, создание растительности
+        islandMap.plant_initialization();
 
-        animal.move(100,10,2);
-
-        list_animals.add( animal);
-
-        Animal animal2  = Farm.Create("Wolf", 10, 10);
-
-        animal2.move(100,10,1);
-
-        list_animals.add(animal2);
+        //первичное размещение животных на острове
+        islandMap.animal_creation();
 
 
-        //System.out.println(" probability "+Event.probability(50));
+        //получаем параметры игры: количество циклов
+        //запускаем жизненный цикл
+        for (int i = 0; i < Params.getCycles(); i++) {
+
+            if (Stats.totalAnimalQuanity() <= 0) break;//если закончились животные то прервыаем цикл жизни на острове
+
+            System.out.println("И настал день № " + (i + 1));
+
+            Stats stats = Stats.getInstance();
+            stats.showStatistic(islandMap);
 
 
-/*        List[][] list1 = new ArrayList[100][20];
+            //выпас травоядных животных
+            Pastures t1 = new Pastures();
+            t1.run();
 
-        List<ArrayList> cohort = new ArrayList<>();
+            //охота плотоядных животных
+            Hunting t2 = new Hunting();
+            t2.run();
 
-        cohort.add((ArrayList) list_animals);
+            //Выращивание детенышей
+            Breeding t3 = new Breeding();
+            t3.run();
 
+            //удаляем старые данные
+            Cleansing clean = Cleansing.getInstance();
+            clean.cleanStaff(islandMap);
 
-        List<ArrayList> cohort = new ArrayList<>();
+            //растения подрастают
+            islandMap.plant_growing();
 
-        cohort.add((ArrayList) list_animals);
+            //двигаем животных по острову
+            islandMap.moving_to_next_cell();
 
-*/
-        List<Animal>[][] island = new ArrayList[10][10];
+            //подготовка к следующему циклу жизни
+            islandMap.preparing_next_cycle();
 
-        //сначала заполняем остров
-        for (int x = 0; x < 10; x++) {
-
-            for (int y = 0; y < 10; y++) {
-
-                //добавляем растительность
-                System.out.println("x= "+x+" у= "+y);
-             }
+            System.out.println("И завершился день № " + (i + 1));
+            //собираем статистику
+            stats.showStatistic(islandMap);
         }
 
-        island[0][0] = list_animals;
+        //запускаем периодический сбор статистики. собираем ее 15 секунд и потом заканчиваем сбор
+        ScheduledExecutorService executorService = Executors.newScheduledThreadPool(2);
+        executorService.scheduleAtFixedRate(new ThrPool.Tasks(), 0, 3, TimeUnit.SECONDS);
 
-        //теперь смотрим что на острове
-        for (int x = 0; x < 10; x++) {
-            for (int y = 0; y < 10; y++) {
-
-                try {
-
-
-                    List<Animal> copy1 = new ArrayList<>();
-                    copy1.addAll(island[x][y]);
-
-                    List<Animal> copy2 = new ArrayList<>();
-                    copy2.addAll(island[x][y]);
-
-                    for (Animal a : copy1) {
-                        //System.out.println("coordinates : x ="+i+" y="+y+" "+list1[i][y]);
-                        for (Animal b : copy2) {
-                            if (a.equals(b)){
-                                System.out.println("objects are equal "+b.toString());
-                            }else {
-
-                                if (a.carnivore==true && b.carnivore==false){
-
-                                    a.eat(b);//хищник съел травоядное
-                                    island[x][y].remove(b);//травоядного больше нет
-                                    break;
-                                }else if (a.name == b.name) {
-                                    island[x][y].add(a.reproduce());
-                                    break;
-                                }
-
-                                System.out.println("objects are not equal "+b.toString());
-                                System.out.println(island[x][y]);
-                            }
-
-                        }
-                    }
-                } catch (NullPointerException e){}
-            }
-        }
+        Thread.currentThread().sleep(15000);
+        executorService.shutdown();
     }
 }
